@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 [Route("[controller]")]
 [ApiController]
-public class PowerPlantController : ControllerBase{
+public class ProductionPlanController : ControllerBase{
     [HttpGet]
-    public string GetPowerPlant(){
+    public string GetProductionPlan(){
         return "Ok";
     }
 }
