@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EnergyPlanner.Domain\EnergyPlanner.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
