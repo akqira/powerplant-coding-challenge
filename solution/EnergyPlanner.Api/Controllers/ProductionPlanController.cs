@@ -46,7 +46,7 @@ public class ProductionPlanController : ControllerBase
             return Ok(JsonSerializer.Serialize(new UnifiedApiResponse
             {
                 Success = true,
-                Data = productionOutputDTOs
+                Data = productionPlan
             }, options));
 
         }

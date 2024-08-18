@@ -17,7 +17,7 @@ public class EnergyProductionService : IEnergyProductionService
 
     public ProductionPlan GenerateProductionPlan(ProductionRequest productionRequest)
     {
-        var productionPlan = new ProductionPlan();
+        var productionPlan = new ProductionPlan(productionRequest.Load);
 
         try
         {
