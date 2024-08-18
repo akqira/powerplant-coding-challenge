@@ -3,5 +3,7 @@ namespace EnergyPlanner.Domain.Interfaces;
 
 public interface IEnergyProductionService
 {
-    double GenerateProductionPlan(ProductionPlanInput productionPlanInput);
+    ProductionPlan GenerateProductionPlan(ProductionPlanInput productionPlanInput);
+
+    List<BasePowerPlant> OrderPowerPlantsByMerite(List<BasePowerPlant> powerPlants);
 }

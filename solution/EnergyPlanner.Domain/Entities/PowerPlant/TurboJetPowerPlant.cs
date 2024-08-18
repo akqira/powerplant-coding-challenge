@@ -1,11 +1,22 @@
+using EnergyPlanner.Domain.Exceptions;
+
 namespace EnergyPlanner.Domain.Entities;
 
 public class TurboJetPowerPlant : BasePowerPlant
 {
-    public TurboJetPowerPlant(string name, double efficiency, double pmax, double pmin, double kerosineCostPerMwh) : base(name, efficiency, pmax, pmin)
+    public TurboJetPowerPlant(string name, double efficiency, double pmax, double pmin, double kerosinePrice) : base(name, efficiency, pmax, pmin)
     {
-        kerosineCostPerMwh = kerosineCostPerMwh;
+        if (kerosinePrice < 0)
+        {
+            throw new PowerPlantCostMustBeGreaterThanZeroException();
+        }
+        this.KerosinePrice = kerosinePrice;
     }
 
-    public double kerosineCostPerMwh { get; set; }
+    public double KerosinePrice { get; set; }
+
+    public override double CostPerMwh()
+    {
+        return KerosinePrice / Efficiency;
+    }
 }

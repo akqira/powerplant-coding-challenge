@@ -6,8 +6,24 @@ namespace EnergyPlanner.Application.Services;
 
 public class EnergyProductionService : IEnergyProductionService
 {
-    public double GenerateProductionPlan(ProductionPlanInput productionPlanInput)
+    public ProductionPlan GenerateProductionPlan(ProductionPlanInput productionPlanInput)
     {
-        return 0;
+
+        var productionPlan = new ProductionPlan(name: null, productionPlanInput);
+
+        // Order power plants by merit
+        var powerPlantsByMerite = OrderPowerPlantsByMerite(productionPlanInput.PowerPlants);
+
+        foreach (var powerPlant in powerPlantsByMerite)
+        {
+            
+        }
+        
+        return productionPlan;
+    }
+
+    public List<BasePowerPlant> OrderPowerPlantsByMerite(List<BasePowerPlant> powerPlants)
+    {
+        return powerPlants.OrderBy(p => p.CostPerMwh()).ToList();
     }
 }

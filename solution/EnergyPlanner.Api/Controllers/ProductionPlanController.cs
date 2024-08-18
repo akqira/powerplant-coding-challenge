@@ -1,3 +1,4 @@
+using EnergyPlanner.Api.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("[controller]")]
@@ -12,10 +13,11 @@ public class ProductionPlanController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public string GetProductionPlan()
+    [HttpPost]
+    public IActionResult GetProductionPlan(PowerPlantRequestDTO productionPlanRequest)
     {
+
         _logger.LogInformation("GetProductionPlan called");
-        return "Ok";
+        return Ok(new { Plan = productionPlanRequest.ToProductionPlanInput() });
     }
 }

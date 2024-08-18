@@ -11,6 +11,26 @@ public abstract class BasePowerPlant
             throw new PowerPlantMissingNameException();
         }
 
+        if (pmin < 0)
+        {
+            throw new PowerPlantPminMustBeGreaterThanZeroException();
+        }
+
+        if (pmax <= pmin)
+        {
+            throw new PowerPlantPmaxMustBeGreaterThanPminException();
+        }
+
+        if (efficiency <= 0)
+        {
+            throw new PowerPlantEfficiencyMustBeGreaterThanZeroException();
+        }
+
+        if (efficiency > 1)
+        {
+            throw new PowerPlantEfficiencyMaxValueException();
+        }
+
         Name = name;
         Efficiency = efficiency;
         Pmax = pmax;
@@ -21,4 +41,27 @@ public abstract class BasePowerPlant
     public double Efficiency { get; set; }
     public double Pmin { get; set; }
     public double Pmax { get; set; }
+    public abstract double CostPerMwh();
+    public double AllocatePower(double? load)
+    {
+        double allocatedPower = 0;
+        if (load == null)
+        {
+            return allocatedPower;
+        }
+
+        if (load.Value < Pmin)
+        {
+            throw new PowerPlantPminExceededException();
+        }
+
+        if (load.Value > Pmax)
+        {
+            load = Pmax;
+        }
+
+        allocatedPower = load.Value;
+        Pmax -= allocatedPower;
+        return allocatedPower;
+    }
 }
