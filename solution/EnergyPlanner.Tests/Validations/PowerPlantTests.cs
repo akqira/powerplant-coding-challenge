@@ -8,7 +8,7 @@ public class PowerPlantTests
     public void PowerPlantNameIsMandatory()
     {
         // act & assert
-        var exception = Assert.Throws<PowerPlantMissingNameException>(() => new GasolinePowerPlant("", 0.5, 100, 0, 10));
+        var exception = Assert.Throws<PowerPlantMissingNameException>(() => new GasolinePowerPlant("", 0.5m, 100, 0, 10));
 
         Assert.Equal("Power plant name is mandatory", exception.Message);
     }
@@ -27,7 +27,7 @@ public class PowerPlantTests
     public void PowerPlantEfficiencyMustBeGreaterThanZero()
     {
         // act & assert
-        var exception = Assert.Throws<PowerPlantEfficiencyMustBeGreaterThanZeroException>(() => new GasolinePowerPlant(name: "Gasoline", efficiency: -0.1, pmax: 50, pmin: 1, gasPrice: 10));
+        var exception = Assert.Throws<PowerPlantEfficiencyMustBeGreaterThanZeroException>(() => new GasolinePowerPlant(name: "Gasoline", efficiency: -0.1m, pmax: 50, pmin: 1, gasPrice: 10));
 
         Assert.Equal("Power plant efficiency must be greater than zero", exception.Message);
     }
@@ -36,7 +36,7 @@ public class PowerPlantTests
     public void PowerPlantEfficiencyCannotBeGreaterThanOne()
     {
         // act & assert
-        var exception = Assert.Throws<PowerPlantEfficiencyMaxValueException>(() => new GasolinePowerPlant(name: "Gasoline", efficiency: 1.1, pmax: 50, pmin: 40, gasPrice: 10));
+        var exception = Assert.Throws<PowerPlantEfficiencyMaxValueException>(() => new GasolinePowerPlant(name: "Gasoline", efficiency: 1.1m, pmax: 50, pmin: 40, gasPrice: 10));
 
         Assert.Equal("Power plant efficiency cannot be greater than 1", exception.Message);
     }
@@ -45,7 +45,7 @@ public class PowerPlantTests
     public void GasolinePowerPlantCostCannotBeNegative()
     {
         // act & assert
-        var exception = Assert.Throws<PowerPlantCostMustBeGreaterThanZeroException>(() => new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5, pmax: 50, pmin: 40, gasPrice: -10));
+        var exception = Assert.Throws<PowerPlantCostMustBeGreaterThanZeroException>(() => new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5m, pmax: 50, pmin: 40, gasPrice: -10));
 
         Assert.Equal("Power plant gas cost must be greater than zero", exception.Message);
     }

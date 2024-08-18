@@ -2,9 +2,9 @@ using EnergyPlanner.Domain.Exceptions;
 
 namespace EnergyPlanner.Domain.Entities;
 
-public class ProductionPlanInput
+public class ProductionRequest
 {
-    public ProductionPlanInput(double load)
+    public ProductionRequest(decimal load)
     {
         if (load <= 0)
         {
@@ -15,7 +15,7 @@ public class ProductionPlanInput
         PowerPlants = new List<BasePowerPlant>();
     }
 
-    public double Load { get; }
+    public decimal Load { get; }
     public List<BasePowerPlant> PowerPlants { get; }
 
     public void AddPowerPlant(BasePowerPlant powerPlant)

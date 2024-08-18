@@ -1,18 +1,18 @@
 using EnergyPlanner.Domain.Entities;
 using EnergyPlanner.Domain.Exceptions;
 
-namespace EnergyPlanner.Api.DTO;
+namespace EnergyPlanner.Api;
 
 
-public class PowerPlantRequestDTO
+public class ProductionPlanRequestDTO
 {
     public int Load { get; set; }
     public FuelDTO Fuels { get; set; }
     public List<PowerPlantDTO> Powerplants { get; set; }
 
-    public ProductionPlanInput ToProductionPlanInput()
+    public ProductionRequest ToProductionPlanInput()
     {
-        var productionPlanInput = new ProductionPlanInput(Load);
+        var productionPlanInput = new ProductionRequest(Load);
 
         foreach (var powerPlant in Powerplants)
         {

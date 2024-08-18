@@ -1,12 +1,18 @@
+using EnergyPlanner.Api.Converters;
+using EnergyPlanner.Application.Services;
+using EnergyPlanner.Domain.Interfaces;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
     .CreateLogger();
 
 // Add services to the container.
+builder.Services.AddTransient<IEnergyProductionService, EnergyProductionService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();

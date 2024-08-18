@@ -1,6 +1,8 @@
 using EnergyPlanner.Application.Services;
 using EnergyPlanner.Domain.Entities;
 using EnergyPlanner.Domain.Exceptions;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace EnergyPlanner.Tests;
 
@@ -12,7 +14,7 @@ public class ProductionPlanTests
     {
         // act & assert
         var exception = Assert.Throws<ProductionPlanInputLoadException>(() =>
-        new ProductionPlanInput(load: 0));
+        new ProductionRequest(load: 0));
 
         Assert.Equal("Production Plan Load must be greater than zero", exception.Message);
     }
@@ -21,7 +23,7 @@ public class ProductionPlanTests
     public void ProductionPlanNameIsMandatory()
     {
         // act & assert
-        var productionPlan = new ProductionPlan(name: null, productionPlanInput: null);
+        var productionPlan = new ProductionPlan(name: null);
 
         Assert.Equal($"Production Plan {DateTime.Now}", productionPlan.Name);
     }
@@ -31,8 +33,8 @@ public class ProductionPlanTests
     public void ProductionPlanInputPowerPlantsMustBeUnique()
     {
         // arrange
-        var productionPlanInput = new ProductionPlanInput(load: 100);
-        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5, pmax: 100, pmin: 0, gasPrice: 10);
+        var productionPlanInput = new ProductionRequest(load: 100);
+        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5m, pmax: 100, pmin: 0, gasPrice: 10);
         productionPlanInput.AddPowerPlant(powerPlant);
 
         // act & assert
@@ -46,8 +48,8 @@ public class ProductionPlanTests
     public void ProductionPlanInputRemovePowerPlantMustExist()
     {
         // arrange
-        var productionPlanInput = new ProductionPlanInput(load: 100);
-        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5, pmax: 100, pmin: 0, gasPrice: 10);
+        var productionPlanInput = new ProductionRequest(load: 100);
+        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5m, pmax: 100, pmin: 0, gasPrice: 10);
         productionPlanInput.AddPowerPlant(powerPlant);
 
         // act
@@ -61,8 +63,8 @@ public class ProductionPlanTests
     public void ProductionPlanInputRemovePowerPlantMustExistException()
     {
         // arrange
-        var productionPlanInput = new ProductionPlanInput(load: 100);
-        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5, pmax: 100, pmin: 0, gasPrice: 10);
+        var productionPlanInput = new ProductionRequest(load: 100);
+        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5m, pmax: 100, pmin: 0, gasPrice: 10);
         productionPlanInput.AddPowerPlant(powerPlant);
 
         // act
@@ -74,32 +76,35 @@ public class ProductionPlanTests
     }
 
     [Fact]
-    public void GenerateProductionPlanCannotExceedRequestedLoad(){
+    public void GenerateProductionPlanCannotExceedRequestedLoad()
+    {
         // arrange
-        var productionPlanInput = new ProductionPlanInput(load: 100);
-        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5, pmax: 100, pmin: 0, gasPrice: 10);
+        var productionPlanInput = new ProductionRequest(load: 100);
+        var powerPlant = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5m, pmax: 100, pmin: 0, gasPrice: 10);
         productionPlanInput.AddPowerPlant(powerPlant);
 
         // act
-        var productionPlan = new ProductionPlan(name: "Test", productionPlanInput);
+        var productionPlan = new ProductionPlan(name: "Test");
 
         // assert
-        Assert.Equal(0, productionPlan.TotalLoadGenerated);
-        Assert.Equal(100, productionPlanInput.Load);    
-        Assert.True(productionPlan.TotalLoadGenerated <= productionPlanInput.Load);
+
+        Assert.Equal(100, productionPlanInput.Load);
+        Assert.True(productionPlan.ProductionOutputs.Sum(p => p.GeneratedLoad) <= productionPlanInput.Load);
     }
 
     [Fact]
-    public void MeriteOrderMustBeCorrect(){
+    public void MeriteOrderMustBeCorrect()
+    {
         // arrange
-        var powerPlant1 = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5, pmax: 100, pmin: 0, gasPrice: 10);
-        var powerPlant2 = new TurboJetPowerPlant(name: "TurboJet1", efficiency: 0.3, pmax: 100, pmin: 0, kerosineCost: 10);
-        var powerPlant3 = new GasolinePowerPlant(name: "Gasoline3", efficiency: 0.5, pmax: 100, pmin: 0, gasPrice: 5);
+        var mockLogger = new Mock<ILogger<EnergyProductionService>>();
+        var powerPlant1 = new GasolinePowerPlant(name: "Gasoline", efficiency: 0.5m, pmax: 100, pmin: 0, gasPrice: 10);
+        var powerPlant2 = new TurboJetPowerPlant(name: "TurboJet1", efficiency: 0.3m, pmax: 100, pmin: 0, kerosinePrice: 10);
+        var powerPlant3 = new GasolinePowerPlant(name: "Gasoline3", efficiency: 0.5m, pmax: 100, pmin: 0, gasPrice: 5);
         var powerPlant4 = new WindPowerPlant(name: "Wind", pmax: 100, windPercentage: 50);
         var powerPlants = new List<BasePowerPlant> { powerPlant1, powerPlant2, powerPlant3, powerPlant4 };
 
         // act
-        var energyProductionService = new EnergyProductionService();
+        var energyProductionService = new EnergyProductionService(mockLogger.Object);
         var orderedPowerPlants = energyProductionService.OrderPowerPlantsByMerite(powerPlants);
 
         // assert

@@ -4,7 +4,7 @@ namespace EnergyPlanner.Domain.Entities;
 
 public abstract class BasePowerPlant
 {
-    public BasePowerPlant(string name, double efficiency, double pmax, double pmin = 0)
+    public BasePowerPlant(string name, decimal efficiency, decimal pmax, decimal pmin = 0, decimal powerAllocationPrecision = 0.1m)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -35,16 +35,18 @@ public abstract class BasePowerPlant
         Efficiency = efficiency;
         Pmax = pmax;
         Pmin = pmin;
+        PowerAllocationPrecision = powerAllocationPrecision;
     }
 
     public string Name { get; set; }
-    public double Efficiency { get; set; }
-    public double Pmin { get; set; }
-    public double Pmax { get; set; }
-    public abstract double CostPerMwh();
-    public double AllocatePower(double? load)
+    public decimal Efficiency { get; set; }
+    public decimal Pmin { get; set; }
+    public decimal Pmax { get; set; }
+    public decimal PowerAllocationPrecision { get; init; }
+    public abstract decimal CostPerMwh();
+    public virtual decimal AllocatedPower(decimal? load)
     {
-        double allocatedPower = 0;
+        decimal allocatedPower = 0;
         if (load == null)
         {
             return allocatedPower;
@@ -60,7 +62,7 @@ public abstract class BasePowerPlant
             load = Pmax;
         }
 
-        allocatedPower = load.Value;
+        allocatedPower = Math.Round(load.Value / PowerAllocationPrecision) * PowerAllocationPrecision;
         Pmax -= allocatedPower;
         return allocatedPower;
     }

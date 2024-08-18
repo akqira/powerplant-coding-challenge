@@ -4,7 +4,7 @@ namespace EnergyPlanner.Domain.Entities;
 
 public class GasolinePowerPlant : BasePowerPlant
 {
-    public GasolinePowerPlant(string name, double efficiency, double pmax, double pmin, double gasPrice) : base(name, efficiency, pmax, pmin)
+    public GasolinePowerPlant(string name, decimal efficiency, decimal pmax, decimal pmin, decimal gasPrice) : base(name, efficiency, pmax, pmin)
     {
         if (gasPrice < 0)
         {
@@ -14,9 +14,9 @@ public class GasolinePowerPlant : BasePowerPlant
         GasPrice = gasPrice;
     }
 
-    public double GasPrice { get; set; }
+    public decimal GasPrice { get; set; }
 
-    public override double CostPerMwh()
+    public override decimal CostPerMwh()
     {
         return GasPrice / Efficiency;
     }

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.4" />
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EnergyPlanner.Domain\EnergyPlanner.Domain.csproj" />
+    <ProjectReference Include="..\EnergyPlanner.Application\EnergyPlanner.Application.csproj" />
   </ItemGroup>
 
 </Project>

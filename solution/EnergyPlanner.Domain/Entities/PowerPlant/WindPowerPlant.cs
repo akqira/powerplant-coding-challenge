@@ -4,7 +4,7 @@ namespace EnergyPlanner.Domain.Entities;
 
 public class WindPowerPlant : BasePowerPlant
 {
-    public WindPowerPlant(string name, double pmax, double windPercentage) : base(name, efficiency: 1, pmax)
+    public WindPowerPlant(string name, decimal pmax, decimal windPercentage) : base(name, efficiency: 1, pmax)
     {
         if (windPercentage < 0 || windPercentage > 100)
         {
@@ -12,11 +12,13 @@ public class WindPowerPlant : BasePowerPlant
         }
 
         WindPercentage = windPercentage;
+        Pmax = pmax * (windPercentage / 100);        
     }
-    public double WindPercentage { get; set; }
+    public decimal WindPercentage { get; set; }
 
-    public override double CostPerMwh()
+    public override decimal CostPerMwh()
     {
         return 0;
     }
+
 }

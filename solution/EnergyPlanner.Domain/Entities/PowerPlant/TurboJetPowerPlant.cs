@@ -4,7 +4,7 @@ namespace EnergyPlanner.Domain.Entities;
 
 public class TurboJetPowerPlant : BasePowerPlant
 {
-    public TurboJetPowerPlant(string name, double efficiency, double pmax, double pmin, double kerosinePrice) : base(name, efficiency, pmax, pmin)
+    public TurboJetPowerPlant(string name, decimal efficiency, decimal pmax, decimal pmin, decimal kerosinePrice) : base(name, efficiency, pmax, pmin)
     {
         if (kerosinePrice < 0)
         {
@@ -13,9 +13,9 @@ public class TurboJetPowerPlant : BasePowerPlant
         this.KerosinePrice = kerosinePrice;
     }
 
-    public double KerosinePrice { get; set; }
+    public decimal KerosinePrice { get; set; }
 
-    public override double CostPerMwh()
+    public override decimal CostPerMwh()
     {
         return KerosinePrice / Efficiency;
     }
