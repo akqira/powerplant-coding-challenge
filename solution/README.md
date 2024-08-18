@@ -2,15 +2,30 @@
 
 ## Overview
 
-The power plant challenge at [Challenge]https://github.com/akqira/powerplant-coding-challenge is resolved in this repo and organized as following :
+The power plant challenge at https://github.com/akqira/powerplant-coding-challenge is resolved in this repo and organized as following :
 
 - .NET 8 API Project
 - Unit test project
 - Domain and Application projects holding business related rules
+- Logging is generated to folder /logs/
+
+## Solution
+
+- The proposed solution rely on clean architecture, it inject a logger using serilog and output to daily file under /logs
+- The API project name EnergyPlanner.Api uses EnergyPlanner.Domain and EnergyPlanner.Application, no need to EnergyPlanner.Infrastructure because no storage or external service is used
+- The endpoint /ProductionPlan call the method GenerateProductionPlan available in EnergyProductionService (Application layer)
+- The called method will build the production plan according to business rules and return a ProductionPlan object
+- The ouput of endpoint has more data theb expected, it can be quickly adapted to match the exact expectation and this is a volonatry decision
+
+## How run tests
+- clone the repo locally
+- ensure that you have .net 8 sdk or runtime installed on your machine
+- on your terminal navigate to EnergyPlanner.Tests folder and run `dotnet test` command
+- tests results should appears on your console
 
 ## How run this solution
 
-- Clone the repo locally
+- clone the repo locally
 - ensure that you have .net 8 sdk or runtime installed on your machine
 - on your terminal navigate to EnergyPlanner.Api folder and run `dotnet run` command
 - on your terminal you will see that app is up and running on https://localhost:8888
@@ -106,3 +121,12 @@ The power plant challenge at [Challenge]https://github.com/akqira/powerplant-cod
   }
 }
 ```
+
+## Conclusion
+- I enjoyed your test, I made more then 4 Hours clearly because of my need to always find better solution, even with current solution I feel it's not yet perfect 
+
+- I didn't include Docker as it's too simple, the idea was to even include SEQ logging in a dockerfile in order to have a better logging tool.
+
+Thank you for your time, I hope to meet you soon
+Best Regards
+Abdelkadir KEBIR
